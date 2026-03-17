@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #232323;">
+            <children>
+                <ImageView fitHeight="97.0" fitWidth="185.0" layoutX="108.0" layoutY="192.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@imgs/choreday.png" />
+                    </image></ImageView>
+                <Label contentDisplay="CENTER" layoutX="45.0" layoutY="274.0" prefHeight="86.0" prefWidth="322.0" text="Plan your day, Know the weather, Complete tasks with ease......" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true">
+                    <font>
+                        <Font name="Calibri Bold" size="22.0" />
+                    </font>
+                </Label>
+                <Label contentDisplay="CENTER" layoutX="71.0" layoutY="552.0" prefHeight="28.0" prefWidth="257.0" text="© All rights reserved - 2026 - Java Project - Group 45" textAlignment="CENTER" textFill="WHITE" textOverrun="CLIP" wrapText="true">
+                    <font>
+                        <Font name="Calibri" size="12.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="400.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #ffffff;">
+            <children>
+            <TextField layoutX="60.0" layoutY="129.0" prefHeight="42.0" prefWidth="277.0" promptText="Enter Full Name" style="-fx-border-radius: 0; -fx-border-color: #232323; -fx-border-width: 0.5px; -fx-background-color: #ffffff;" />
+                <TextField layoutX="61.0" layoutY="193.0" prefHeight="42.0" prefWidth="277.0" promptText="Enter Student ID" style="-fx-border-radius: 0; -fx-border-color: #232323; -fx-border-width: 0.5px; -fx-background-color: #ffffff;" />
+            <PasswordField layoutX="59.0" layoutY="257.0" prefHeight="42.0" prefWidth="278.0" promptText="Enter Password" style="-fx-border-radius: 0; -fx-background-color: #ffffff; -fx-border-color: #232323; -fx-border-width: 0.5px;" />
+            <PasswordField layoutX="60.0" layoutY="323.0" prefHeight="42.0" prefWidth="278.0" promptText="Enter Password Confirmation" style="-fx-background-color: #ffffff; -fx-border-color: #232323; -fx-border-width: 0.5px;" />
+                <Button layoutX="60.0" layoutY="406.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="278.0" style="-fx-background-color: #232323; -fx-border-radius: 0;" text="Sign Up" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Label layoutX="61.0" layoutY="480.0" text="Already have an accout?" textFill="#9e9e9e" />
+                <Button layoutX="183.0" layoutY="476.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="62.0" style="-fx-background-color: transparent; -fx-border-radius: 0; -fx-cursor: cursor;" text="Sign In" textFill="#232323" underline="true" />
+            </children></AnchorPane>
+    </children>
+</AnchorPane>
