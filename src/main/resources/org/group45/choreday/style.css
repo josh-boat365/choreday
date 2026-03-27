@@ -14,16 +14,16 @@
     -fx-transition: all 0.2s ease;
 }
 
-/* Primary Button (Premium Blue) */
+/* Primary Button (Dark/Black) */
 .button.primary {
-    -fx-background-color: #007AFF;
+    -fx-background-color: #232323;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 122, 255, 0.2), 10, 0, 0, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);
 }
 
 .button.primary:hover {
-    -fx-background-color: #0062CC;
+    -fx-background-color: #333333;
 }
 
 .button:hover {
@@ -92,7 +92,7 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: #007AFF;
+    -fx-background-color: #232323;
     -fx-background-radius: 6px;
 }
 
