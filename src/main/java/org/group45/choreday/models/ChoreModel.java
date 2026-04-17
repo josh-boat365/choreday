@@ -30,5 +30,6 @@ public class ChoreModel {
     @JoinColumn(name = "student_id")
     private UserModel user;
 
+    private LocalDateTime scheduledAt;
     private LocalDateTime createdAt;
 }

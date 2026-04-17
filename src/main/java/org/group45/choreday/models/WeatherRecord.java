@@ -23,6 +23,7 @@ public class WeatherRecord {
     private String humidity;
     private String uvIndex;
     private String feelsLike;
+    private String weatherDescription;
     private String city;
     private String country;
 }

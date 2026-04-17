@@ -158,3 +158,48 @@
 .progress-indicator {
     -fx-progress-color: #007AFF;
 }
+
+/* Combo Box Styling */
+.combo-box {
+    -fx-background-radius: 8px;
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #007AFF;
+    -fx-border-width: 2px;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #232323;
+}
+
+.time-combo {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* Icon Button (Circular Refresh) */
+.icon-button {
+    -fx-background-color: #F0F0F0;
+    -fx-background-radius: 50%;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-text-fill: #232323;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-transition: all 0.2s ease;
+}
+
+.icon-button:hover {
+    -fx-background-color: #E0E0E0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-rotate: 90;
+}

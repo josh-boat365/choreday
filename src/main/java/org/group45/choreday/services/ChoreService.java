@@ -13,22 +13,30 @@ public class ChoreService {
     private WeatherService weatherService = new WeatherService();
 
     public boolean saveChore(String activityName, String city, String studentId) {
-        WeatherResponse weather = weatherService.getWeatherData(city);
+        return saveChore(activityName, city, studentId, null);
+    }
+
+    public boolean saveChore(String activityName, String city, String studentId, java.time.LocalDateTime targetTime) {
+        WeatherResponse weather = (targetTime == null) 
+                ? weatherService.getWeatherData(city)
+                : weatherService.getWeatherData(city, targetTime);
+        
         if (weather == null) return false;
 
         try (Connection conn = DatabaseConnectionPool.getConnection()) {
             conn.setAutoCommit(false);
             try {
                 // 1. Save Weather Record
-                String weatherSql = "INSERT INTO weather_records (temperature, wind_speed, humidity, uv_index, feels_like, city, country) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String weatherSql = "INSERT INTO weather_records (temperature, wind_speed, humidity, uv_index, feels_like, weather_description, city, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement weatherStmt = conn.prepareStatement(weatherSql, Statement.RETURN_GENERATED_KEYS);
                 weatherStmt.setString(1, weather.getTemperature());
                 weatherStmt.setString(2, weather.getWindSpeed());
                 weatherStmt.setString(3, weather.getHumidity());
                 weatherStmt.setString(4, weather.getUvIndex());
                 weatherStmt.setString(5, weather.getFeelsLike());
-                weatherStmt.setString(6, weather.getCity());
-                weatherStmt.setString(7, weather.getCountry());
+                weatherStmt.setString(6, weather.getWeatherDescription());
+                weatherStmt.setString(7, weather.getCity());
+                weatherStmt.setString(8, weather.getCountry());
 
                 weatherStmt.executeUpdate();
                 ResultSet rs = weatherStmt.getGeneratedKeys();
@@ -38,12 +46,17 @@ public class ChoreService {
                 }
 
                 // 2. Save Chore
-                String choreSql = "INSERT INTO chores (activity_name, city, weather_id, student_id) VALUES (?, ?, ?, ?)";
+                String choreSql = "INSERT INTO chores (activity_name, city, weather_id, student_id, scheduled_at) VALUES (?, ?, ?, ?, ?)";
                 PreparedStatement choreStmt = conn.prepareStatement(choreSql);
                 choreStmt.setString(1, activityName);
                 choreStmt.setString(2, city);
                 choreStmt.setLong(3, weatherId);
                 choreStmt.setString(4, studentId);
+                if (targetTime != null) {
+                    choreStmt.setTimestamp(5, Timestamp.valueOf(targetTime));
+                } else {
+                    choreStmt.setNull(5, Types.TIMESTAMP);
+                }
                 choreStmt.executeUpdate();
 
                 conn.commit();
@@ -61,9 +74,9 @@ public class ChoreService {
 
     public List<ChoreModel> getChoresForUser(String studentId) {
         List<ChoreModel> chores = new ArrayList<>();
-        String sql = "SELECT c.*, w.temperature, w.wind_speed, w.humidity, w.uv_index, w.feels_like, w.city as w_city, w.country " +
+        String sql = "SELECT c.*, w.temperature, w.wind_speed, w.humidity, w.uv_index, w.feels_like, w.weather_description, w.city as w_city, w.country " +
                      "FROM chores c LEFT JOIN weather_records w ON c.weather_id = w.id " +
-                     "WHERE c.student_id = ? ORDER BY c.created_at DESC";
+                     "WHERE c.student_id = ? ORDER BY COALESCE(c.scheduled_at, c.created_at) DESC";
 
         try (Connection conn = DatabaseConnectionPool.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -79,15 +92,21 @@ public class ChoreService {
                         .humidity(rs.getString("humidity"))
                         .uvIndex(rs.getString("uv_index"))
                         .feelsLike(rs.getString("feels_like"))
+                        .weatherDescription(rs.getString("weather_description"))
                         .city(rs.getString("w_city"))
                         .country(rs.getString("country"))
                         .build();
+
+                Timestamp scheduledAtTs = rs.getTimestamp("scheduled_at");
+                Timestamp createdAtTs = rs.getTimestamp("created_at");
 
                 ChoreModel chore = ChoreModel.builder()
                         .id(rs.getLong("id"))
                         .activityName(rs.getString("activity_name"))
                         .city(rs.getString("city"))
                         .weather(weather)
+                        .scheduledAt(scheduledAtTs != null ? scheduledAtTs.toLocalDateTime() : null)
+                        .createdAt(createdAtTs != null ? createdAtTs.toLocalDateTime() : null)
                         .build();
                 
                 chores.add(chore);

@@ -39,11 +39,11 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- JDBC Driver for MySQL -->
+        <!-- JDBC Driver for PostgreSQL -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
         </dependency>
 
         <!-- JDBC Connection Pool -->

@@ -62,6 +62,12 @@ public class DashboardController {
     @FXML
     private TextField cityField;
     @FXML
+    private DatePicker datePicker;
+    @FXML
+    private ComboBox<String> hourCombo;
+    @FXML
+    private ComboBox<String> minuteCombo;
+    @FXML
     private Button addButton;
     @FXML
     private ProgressIndicator addLoading;
@@ -95,33 +101,51 @@ public class DashboardController {
         // 2. Setup Date/Time
         updateDateTime();
 
-        // 3. Setup Table
+        // 3. Setup Time Dropdowns
+        for (int i = 0; i < 24; i++) {
+            hourCombo.getItems().add(String.format("%02d", i));
+        }
+        for (int i = 0; i < 60; i += 5) {
+            minuteCombo.getItems().add(String.format("%02d", i));
+        }
+        hourCombo.getSelectionModel().select("09");
+        minuteCombo.getSelectionModel().select("00");
+
+        // 4. Setup Table
         activityColumn.setCellValueFactory(new PropertyValueFactory<>("activityName"));
         cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
         weatherColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getWeather() != null) {
-                // Display weather description from archived weather snapshot
-                return new javafx.beans.property.SimpleStringProperty("Sunny clear sky");
+                return new javafx.beans.property.SimpleStringProperty(
+                        cellData.getValue().getWeather().getWeatherDescription());
             }
             return new javafx.beans.property.SimpleStringProperty("N/A");
         });
         tempColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue().getWeather() != null) {
-                return new javafx.beans.property.SimpleStringProperty(cellData.getValue().getWeather().getTemperature() + "°C");
+                return new javafx.beans.property.SimpleStringProperty(
+                        cellData.getValue().getWeather().getTemperature() + "°C");
             }
             return new javafx.beans.property.SimpleStringProperty("N/A");
         });
         timeColumn.setCellValueFactory(cellData -> {
-            // Display the created time of the chore
-            return new javafx.beans.property.SimpleStringProperty("10:30 AM");
+            LocalDateTime dt = cellData.getValue().getScheduledAt();
+            if (dt == null)
+                dt = cellData.getValue().getCreatedAt();
+
+            if (dt != null) {
+                return new javafx.beans.property.SimpleStringProperty(
+                        dt.format(DateTimeFormatter.ofPattern("MMM d, h:mm a")));
+            }
+            return new javafx.beans.property.SimpleStringProperty("Just now");
         });
         activityTable.setItems(choresList);
         loadChores();
 
-        // 4. Initial Weather (Default to Accra)
+        // 5. Initial Weather
         loadCurrentWeather("Accra");
 
-        // 5. Button Actions
+        // 6. Button Actions
         addButton.setOnAction(event -> addChore());
         resetWeatherButton.setOnAction(event -> {
             if (currentRealTimeWeather != null) {
@@ -130,7 +154,7 @@ public class DashboardController {
             }
         });
 
-        // 6. Table Selection
+        // 7. Table Selection
         activityTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null && newSelection.getWeather() != null) {
                 applyWeatherRecordToUI(newSelection.getWeather());
@@ -138,7 +162,7 @@ public class DashboardController {
             }
         });
 
-        // 7. Profile Icon (Logout)
+        // 8. Profile Icon (Logout)
         profileIcon.setOnMouseClicked(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Logout Confirmation");
@@ -151,6 +175,93 @@ public class DashboardController {
                 org.group45.choreday.utils.Navigator.navigateTo("SignIn.fxml", profileIcon, null, null);
             }
         });
+    }
+
+    private void addChore() {
+        String activity = activityField.getText().trim();
+        String city = cityField.getText().trim();
+        UserModel user = SessionManager.getCurrentUser();
+
+        // Schedule logic
+        java.time.LocalDate date = datePicker.getValue();
+        String hour = hourCombo.getValue();
+        String minute = minuteCombo.getValue();
+        java.time.LocalDateTime targetTime = null;
+
+        if (date != null && hour != null && minute != null) {
+            try {
+                java.time.LocalTime time = java.time.LocalTime.of(Integer.parseInt(hour), Integer.parseInt(minute));
+                targetTime = java.time.LocalDateTime.of(date, time);
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "✗ Error", "Failed to parse time.");
+                return;
+            }
+        }
+
+        // Validation
+        if (activity.isEmpty() || city.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Missing Information",
+                    "Please enter both:\n• Activity/Chore Name\n• City");
+            return;
+        }
+
+        if (user == null) {
+            showAlert(Alert.AlertType.ERROR, "✗ Session Error", "Please sign in again.");
+            return;
+        }
+
+        addLoading.setVisible(true);
+        addButton.setDisable(true);
+
+        java.time.LocalDateTime finalTargetTime = targetTime;
+        new Thread(() -> {
+            boolean success = choreService.saveChore(activity, city, user.getStudentId(), finalTargetTime);
+            Platform.runLater(() -> {
+                addLoading.setVisible(false);
+                addButton.setDisable(false);
+                if (success) {
+                    showAlert(Alert.AlertType.INFORMATION, "✓ Chore Added!", "Chore saved successfully.");
+                    activityField.clear();
+                    cityField.clear();
+                    datePicker.setValue(null);
+                    hourCombo.getSelectionModel().select("09");
+                    minuteCombo.getSelectionModel().select("00");
+                    loadChores();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "✗ Error", "Check city name or connection.");
+                }
+            });
+        }).start();
+    }
+
+    private void loadChores() {
+        UserModel user = SessionManager.getCurrentUser();
+        if (user == null)
+            return;
+        new Thread(() -> {
+            List<ChoreModel> chores = choreService.getChoresForUser(user.getStudentId());
+            Platform.runLater(() -> choresList.setAll(chores));
+        }).start();
+    }
+
+    private void applyWeatherToUI(WeatherResponse weather) {
+        temperatureText.setText(weather.getTemperature() + "°C");
+        conditionAndCountryText
+                .setText(weather.getWeatherDescription() + ", " + weather.getCity() + " " + weather.getCountry());
+        humidityText.setText(weather.getHumidity() + "%");
+        windText.setText(weather.getWindSpeed() + "km/h");
+        uvText.setText(weather.getUvIndex());
+        feelsLike.setText(weather.getFeelsLike() + "°C");
+    }
+
+    private void applyWeatherRecordToUI(WeatherRecord weather) {
+        temperatureText.setText(weather.getTemperature() + "°C");
+        conditionAndCountryText.setText(
+                weather.getWeatherDescription() + " (Archived), " + weather.getCity() + " " + weather.getCountry());
+        humidityText.setText(weather.getHumidity() + "%");
+        windText.setText(weather.getWindSpeed() + "km/h");
+        uvText.setText(weather.getUvIndex());
+        feelsLike.setText(weather.getFeelsLike() + "°C");
     }
 
     private void updateDateTime() {
@@ -173,79 +284,10 @@ public class DashboardController {
         }).start();
     }
 
-    private void addChore() {
-        String activity = activityField.getText().trim();
-        String city = cityField.getText().trim();
-        UserModel user = SessionManager.getCurrentUser();
-
-        // Validation
-        if (activity.isEmpty() || city.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "⚠ Missing Information",
-                "Please enter both:\n• Activity/Chore Name\n• City");
-            return;
-        }
-
-        if (user == null) {
-            showAlert(Alert.AlertType.ERROR, "✗ Session Error",
-                "Your session has expired.\n\nPlease sign in again.");
-            return;
-        }
-
-        addLoading.setVisible(true);
-        addButton.setDisable(true);
-
-        new Thread(() -> {
-            boolean success = choreService.saveChore(activity, city, user.getStudentId());
-            Platform.runLater(() -> {
-                addLoading.setVisible(false);
-                addButton.setDisable(false);
-                if (success) {
-                    showAlert(Alert.AlertType.INFORMATION, "✓ Chore Added!",
-                        "Your chore has been saved successfully.\n\nActivity: " + activity + "\nCity: " + city);
-                    activityField.clear();
-                    cityField.clear();
-                    activityField.requestFocus();
-                    loadChores();
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "✗ Could Not Save Chore",
-                        "Failed to save your chore. Possible reasons:\n• Weather data unavailable for this city\n• Database connection error\n\nPlease check the city name and try again.");
-                    cityField.clear();
-                    cityField.requestFocus();
-                }
-            });
-        }).start();
-    }
-
-    private void loadChores() {
-        UserModel user = SessionManager.getCurrentUser();
-        if (user == null)
-            return;
-        List<ChoreModel> chores = choreService.getChoresForUser(user.getStudentId());
-        choresList.setAll(chores);
-    }
-
-    private void applyWeatherToUI(WeatherResponse weather) {
-        temperatureText.setText(weather.getTemperature() + "°C");
-        conditionAndCountryText
-                .setText(weather.getWeatherDescription() + ", " + weather.getCity() + " " + weather.getCountry());
-        humidityText.setText(weather.getHumidity() + "%");
-        windText.setText(weather.getWindSpeed() + "km/h");
-        uvText.setText(weather.getUvIndex());
-        feelsLike.setText(weather.getFeelsLike() + "°C");
-    }
-
-    private void applyWeatherRecordToUI(WeatherRecord weather) {
-        temperatureText.setText(weather.getTemperature() + "°C");
-        conditionAndCountryText.setText("Archived Snapshot, " + weather.getCity() + " " + weather.getCountry());
-        humidityText.setText(weather.getHumidity() + "%");
-        windText.setText(weather.getWindSpeed() + "km/h");
-        uvText.setText(weather.getUvIndex());
-        feelsLike.setText(weather.getFeelsLike() + "°C");
-    }
-
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
-        alert.getDialogPane().getStylesheets().add(getClass().getResource("/org/group45/choreday/style.css").toExternalForm());
+        alert.getDialogPane().getStylesheets()
+                .add(getClass().getResource("/org/group45/choreday/style.css").toExternalForm());
         alert.getDialogPane().getStyleClass().add("dialog-pane");
         alert.setTitle(title);
         alert.setHeaderText(null);

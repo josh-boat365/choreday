@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -118,35 +121,72 @@
                </font>
             </Label>
             <ProgressIndicator fx:id="weatherLoading" layoutX="305.0" layoutY="17.0" prefHeight="36.0" prefWidth="36.0" visible="false" />
-         </children></Pane>
-      <TextField fx:id="activityField" layoutX="83.0" layoutY="259.0" prefHeight="36.0" prefWidth="284.0" promptText="eg. Morining Lecture with Mr. Dzata" />
-      <TextField fx:id="cityField" layoutX="380.0" layoutY="259.0" prefHeight="36.0" prefWidth="193.0" promptText="Enter City" />
-      <Button fx:id="addButton" layoutX="589.0" layoutY="257.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="132.0" styleClass="primary" text="+ Add" />
-      <ProgressIndicator fx:id="addLoading" layoutX="640.0" layoutY="242.0" prefHeight="30.0" prefWidth="30.0" visible="false" />
-      <Label layoutX="83.0" layoutY="233.0" text="Activity Name" textFill="#232323">
+         </children>
+      </Pane>
+
+      <Label layoutX="83.0" layoutY="205.0" text="Activity Name" textFill="#232323">
          <font>
             <Font name="Calibri Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="380.0" layoutY="233.0" text="City" textFill="#232323">
+      <TextField fx:id="activityField" layoutX="83.0" layoutY="223.0" prefHeight="36.0" prefWidth="284.0" promptText="eg. Morning Lecture" />
+      
+      <Label layoutX="380.0" layoutY="205.0" text="City" textFill="#232323">
          <font>
             <Font name="Calibri Bold" size="14.0" />
          </font>
       </Label>
-      <TableView fx:id="activityTable" layoutX="81.0" layoutY="339.0" prefHeight="247.0" prefWidth="644.0">
+      <TextField fx:id="cityField" layoutX="380.0" layoutY="223.0" prefHeight="36.0" prefWidth="193.0" promptText="Enter City" />
+      
+      <Button fx:id="resetWeatherButton" layoutX="691.0" layoutY="231.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="icon-button" text="↻" visible="false">
+         <tooltip>
+            <Tooltip text="Return to Current Weather" />
+         </tooltip>
+      </Button>
+
+      <Label layoutX="83.0" layoutY="267.0" text="Schedule Date" textFill="#232323">
+         <font>
+            <Font name="Calibri Bold" size="14.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="datePicker" layoutX="81.0" layoutY="289.0" prefHeight="36.0" prefWidth="206.0" promptText="Select Date" />
+      
+      <Label layoutX="300.0" layoutY="267.0" text="Time" textFill="#232323">
+         <font>
+            <Font name="Calibri Bold" size="14.0" />
+         </font>
+      </Label>
+      <HBox layoutX="300.0" layoutY="289.0" spacing="5.0">
+         <children>
+            <ComboBox fx:id="hourCombo" prefHeight="36.0" prefWidth="65.0" promptText="HH" styleClass="time-combo" />
+            <Label text=":" textFill="#232323">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <padding>
+                  <javafx.geometry.Insets top="5.0" />
+               </padding>
+            </Label>
+            <ComboBox fx:id="minuteCombo" prefHeight="36.0" prefWidth="65.0" promptText="mm" styleClass="time-combo" />
+         </children>
+      </HBox>
+
+      <Button fx:id="addButton" layoutX="589.0" layoutY="267.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="132.0" styleClass="primary" text="+ Add Chore" />
+      <ProgressIndicator fx:id="addLoading" layoutX="640.0" layoutY="282.0" prefHeight="30.0" prefWidth="30.0" visible="false" />
+
+      <TableView fx:id="activityTable" layoutX="81.0" layoutY="360.0" prefHeight="226.0" prefWidth="644.0">
         <columns>
           <TableColumn fx:id="activityColumn" prefWidth="150.0" text="ACTIVITY" />
-          <TableColumn fx:id="cityColumn" prefWidth="130.0" text="CITY" />
-          <TableColumn fx:id="weatherColumn" prefWidth="130.0" text="WEATHER" />
-          <TableColumn fx:id="tempColumn" prefWidth="110.0" text="TEMP" />
-          <TableColumn fx:id="timeColumn" prefWidth="124.0" text="TIME" />
+          <TableColumn fx:id="cityColumn" prefWidth="110.0" text="CITY" />
+          <TableColumn fx:id="weatherColumn" prefWidth="140.0" text="WEATHER" />
+          <TableColumn fx:id="tempColumn" prefWidth="100.0" text="TEMP" />
+          <TableColumn fx:id="timeColumn" prefWidth="144.0" text="SCHEDULED TIME" />
         </columns>
       </TableView>
-      <Label layoutX="81.0" layoutY="313.0" text="Today's Activities" textFill="#232323">
+      <Label layoutX="81.0" layoutY="335.0" text="Your Chores" textFill="#232323">
          <font>
             <Font name="Calibri Bold" size="14.0" />
          </font>
       </Label>
-      <Button fx:id="resetWeatherButton" layoutX="533.0" layoutY="205.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="193.0" styleClass="primary" text="Return to Current Weather" visible="false" />
    </children>
 </AnchorPane>
