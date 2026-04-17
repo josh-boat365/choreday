@@ -135,8 +135,11 @@
       </Label>
       <TableView fx:id="activityTable" layoutX="81.0" layoutY="339.0" prefHeight="247.0" prefWidth="644.0">
         <columns>
-          <TableColumn fx:id="activityColumn" prefWidth="320.0" text="ACTIVITY" />
-          <TableColumn fx:id="cityColumn" prefWidth="320.0" text="CITY" />
+          <TableColumn fx:id="activityColumn" prefWidth="150.0" text="ACTIVITY" />
+          <TableColumn fx:id="cityColumn" prefWidth="130.0" text="CITY" />
+          <TableColumn fx:id="weatherColumn" prefWidth="130.0" text="WEATHER" />
+          <TableColumn fx:id="tempColumn" prefWidth="110.0" text="TEMP" />
+          <TableColumn fx:id="timeColumn" prefWidth="124.0" text="TIME" />
         </columns>
       </TableView>
       <Label layoutX="81.0" layoutY="313.0" text="Today's Activities" textFill="#232323">

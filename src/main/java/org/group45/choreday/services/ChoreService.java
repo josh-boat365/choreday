@@ -20,8 +20,8 @@ public class ChoreService {
             conn.setAutoCommit(false);
             try {
                 // 1. Save Weather Record
-                String weatherSql = "INSERT INTO weather_records (temperature, wind_speed, humidity, uv_index, feels_like, city, country) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
-                PreparedStatement weatherStmt = conn.prepareStatement(weatherSql);
+                String weatherSql = "INSERT INTO weather_records (temperature, wind_speed, humidity, uv_index, feels_like, city, country) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement weatherStmt = conn.prepareStatement(weatherSql, Statement.RETURN_GENERATED_KEYS);
                 weatherStmt.setString(1, weather.getTemperature());
                 weatherStmt.setString(2, weather.getWindSpeed());
                 weatherStmt.setString(3, weather.getHumidity());
@@ -30,7 +30,8 @@ public class ChoreService {
                 weatherStmt.setString(6, weather.getCity());
                 weatherStmt.setString(7, weather.getCountry());
 
-                ResultSet rs = weatherStmt.executeQuery();
+                weatherStmt.executeUpdate();
+                ResultSet rs = weatherStmt.getGeneratedKeys();
                 long weatherId = -1;
                 if (rs.next()) {
                     weatherId = rs.getLong(1);

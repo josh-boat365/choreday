@@ -31,15 +31,35 @@
                 </Label>
             </children>
         </AnchorPane>
-        <AnchorPane layoutX="400.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #ffffff;">
-            <children>
-            <TextField fx:id="fullNameField" layoutX="60.0" layoutY="129.0" prefHeight="42.0" prefWidth="277.0" promptText="Enter Full Name" />
-                <TextField fx:id="studentIdField" layoutX="61.0" layoutY="193.0" prefHeight="42.0" prefWidth="277.0" promptText="Enter Student ID" />
-            <PasswordField fx:id="passwordField" layoutX="59.0" layoutY="257.0" prefHeight="42.0" prefWidth="278.0" promptText="Enter Password" />
-            <PasswordField fx:id="confirmPasswordField" layoutX="60.0" layoutY="323.0" prefHeight="42.0" prefWidth="278.0" promptText="Enter Password Confirmation" />
-                <Button fx:id="signUpButton" layoutX="60.0" layoutY="406.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="278.0" styleClass="primary" text="Sign Up" />
-                <ProgressIndicator fx:id="loadingIndicator" layoutX="185.0" layoutY="411.0" prefHeight="30.0" prefWidth="30.0" visible="false" />
-                <HBox alignment="CENTER_LEFT" layoutX="61.0" layoutY="476.0" prefHeight="25.0" prefWidth="277.0">
+         <AnchorPane layoutX="400.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: #ffffff;">
+             <children>
+             <Label layoutX="60.0" layoutY="100.0" text="Full Name" textFill="#232323">
+                <font>
+                   <Font name="Calibri Bold" size="14.0" />
+                </font>
+             </Label>
+             <TextField fx:id="fullNameField" layoutX="60.0" layoutY="119.0" prefHeight="42.0" prefWidth="277.0" promptText="Enter Full Name" />
+             <Label layoutX="61.0" layoutY="168.0" text="Student ID" textFill="#232323">
+                <font>
+                   <Font name="Calibri Bold" size="14.0" />
+                </font>
+             </Label>
+                 <TextField fx:id="studentIdField" layoutX="61.0" layoutY="187.0" prefHeight="42.0" prefWidth="277.0" promptText="Enter Student ID" />
+             <Label layoutX="59.0" layoutY="236.0" text="Password" textFill="#232323">
+                <font>
+                   <Font name="Calibri Bold" size="14.0" />
+                </font>
+             </Label>
+             <PasswordField fx:id="passwordField" layoutX="59.0" layoutY="255.0" prefHeight="42.0" prefWidth="278.0" promptText="Enter Password" />
+             <Label layoutX="60.0" layoutY="304.0" text="Confirm Password" textFill="#232323">
+                <font>
+                   <Font name="Calibri Bold" size="14.0" />
+                </font>
+             </Label>
+             <PasswordField fx:id="confirmPasswordField" layoutX="60.0" layoutY="323.0" prefHeight="42.0" prefWidth="278.0" promptText="Enter Password Confirmation" />
+                 <Button fx:id="signUpButton" layoutX="60.0" layoutY="398.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="278.0" styleClass="primary" text="Sign Up" />
+                 <ProgressIndicator fx:id="loadingIndicator" layoutX="185.0" layoutY="403.0" prefHeight="30.0" prefWidth="30.0" visible="false" />
+                 <HBox alignment="CENTER_LEFT" layoutX="61.0" layoutY="460.0" prefHeight="25.0" prefWidth="277.0">
                    <children>
                        <Label text="Already have an account?" textFill="#9e9e9e" />
                        <Button fx:id="signInText" mnemonicParsing="false" prefHeight="34.0" prefWidth="82.0" style="-fx-background-color: transparent; -fx-border-radius: 0; -fx-cursor: hand;" text="Sign In" textFill="#232323" underline="true" />

@@ -26,34 +26,54 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        signInButton.setOnAction(event -> {
-            String studentId = studentIdField.getText();
-            String password = passwordField.getText();
-
-            // Show loading and disable buttons
-            loadingIndicator.setVisible(true);
-            signInButton.setDisable(true);
-
-            new Thread(() -> {
-                UserModel user = signInService.signIn(studentId, password);
-                
-                Platform.runLater(() -> {
-                    loadingIndicator.setVisible(false);
-                    signInButton.setDisable(false);
-
-                    if (user != null) {
-                        SessionManager.setCurrentUser(user);
-                        Navigator.navigateTo("Dashboard.fxml", studentIdField, null, null);
-                    } else {
-                        showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid student ID or password.");
-                    }
-                });
-            }).start();
-        });
+        signInButton.setOnAction(event -> handleSignIn());
 
         signUpText.setOnAction(event -> {
             Navigator.navigateTo("SignUp.fxml", studentIdField, null, null);
         });
+    }
+
+    private void handleSignIn() {
+        String studentId = studentIdField.getText().trim();
+        String password = passwordField.getText();
+
+        // Validation
+        if (studentId.isEmpty() || password.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Missing Information", 
+                "Please enter both your Student ID and Password.");
+            return;
+        }
+
+        if (studentId.length() < 3) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Invalid Input", 
+                "Student ID must be at least 3 characters long.");
+            return;
+        }
+
+        // Show loading and disable buttons
+        loadingIndicator.setVisible(true);
+        signInButton.setDisable(true);
+
+        new Thread(() -> {
+            UserModel user = signInService.signIn(studentId, password);
+            
+            Platform.runLater(() -> {
+                loadingIndicator.setVisible(false);
+                signInButton.setDisable(false);
+
+                if (user != null) {
+                    showAlert(Alert.AlertType.INFORMATION, "✓ Welcome!", 
+                        "Sign in successful. Loading your dashboard...");
+                    SessionManager.setCurrentUser(user);
+                    Navigator.navigateTo("Dashboard.fxml", studentIdField, null, null);
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "✗ Login Failed", 
+                        "Invalid Student ID or Password.\n\nPlease check your credentials and try again.");
+                    passwordField.clear();
+                    passwordField.requestFocus();
+                }
+            });
+        }).start();
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {

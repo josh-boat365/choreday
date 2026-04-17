@@ -39,11 +39,11 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- JDBC Driver for PostgreSQL -->
+        <!-- JDBC Driver for MySQL -->
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.3</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
         </dependency>
 
         <!-- JDBC Connection Pool -->
@@ -90,8 +90,20 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.32</version>
+                        </path>
+                    </annotationProcessorPaths>
                     <source>17</source>
                     <target>17</target>
+                    <!-- Allow module to read from unnamed module where Lombok lives -->
+                    <compilerArgs>
+                        <arg>--add-reads</arg>
+                        <arg>org.group45.choreday=ALL-UNNAMED</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

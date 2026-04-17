@@ -44,36 +44,7 @@ public class SignUpController {
 
     @FXML
     public void initialize() {
-        signUpButton.setOnAction(event -> {
-            String fullName = fullNameField.getText();
-            String studentId = studentIdField.getText();
-            String password = passwordField.getText();
-            String confirmPassword = confirmPasswordField.getText();
-
-            if (password.equals(confirmPassword)) {
-                loadingIndicator.setVisible(true);
-                signUpButton.setDisable(true);
-
-                new Thread(() -> {
-                    UserModel user = signUpService.signUp(fullName, studentId, password);
-
-                    Platform.runLater(() -> {
-                        loadingIndicator.setVisible(false);
-                        signUpButton.setDisable(false);
-
-                        if (user != null) {
-                            System.out.println("Sign Up Successful!");
-                            SessionManager.setCurrentUser(user);
-                            Navigator.navigateTo("SignIn.fxml", fullNameField, null, null);
-                        } else {
-                            showAlert(Alert.AlertType.ERROR, "Registration Error", "Could not save user to the database.");
-                        }
-                    });
-                }).start();
-            } else {
-                showAlert(Alert.AlertType.WARNING, "Password Mismatch", "Passwords do not match. Please try again.");
-            }
-        });
+        signUpButton.setOnAction(event -> handleSignUp());
 
         signInText.setOnAction(event -> {
             Navigator.navigateTo("SignIn.fxml", fullNameField, null, null);
@@ -84,6 +55,72 @@ public class SignUpController {
                 Navigator.navigateTo("SignIn.fxml", fullNameField, null, null);
             });
         }
+    }
+
+    private void handleSignUp() {
+        String fullName = fullNameField.getText().trim();
+        String studentId = studentIdField.getText().trim();
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
+
+        // Validation
+        if (fullName.isEmpty() || studentId.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Missing Information",
+                "Please fill in all the fields:\n• Full Name\n• Student ID\n• Password\n• Password Confirmation");
+            return;
+        }
+
+        if (fullName.length() < 3) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Invalid Name",
+                "Full Name must be at least 3 characters long.");
+            return;
+        }
+
+        if (studentId.length() < 3) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Invalid Student ID",
+                "Student ID must be at least 3 characters long.");
+            return;
+        }
+
+        if (password.length() < 4) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Weak Password",
+                "Password must be at least 4 characters long.");
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Password Mismatch",
+                "The passwords you entered do not match.\n\nPlease try again.");
+            confirmPasswordField.clear();
+            passwordField.clear();
+            passwordField.requestFocus();
+            return;
+        }
+
+        // Proceed with registration
+        loadingIndicator.setVisible(true);
+        signUpButton.setDisable(true);
+
+        new Thread(() -> {
+            UserModel user = signUpService.signUp(fullName, studentId, password);
+
+            Platform.runLater(() -> {
+                loadingIndicator.setVisible(false);
+                signUpButton.setDisable(false);
+
+                if (user != null) {
+                    showAlert(Alert.AlertType.INFORMATION, "✓ Account Created!",
+                        "Your account has been created successfully.\n\nWelcome, " + fullName + "!");
+                    SessionManager.setCurrentUser(user);
+                    Navigator.navigateTo("SignIn.fxml", fullNameField, null, null);
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "✗ Registration Failed",
+                        "Could not create your account.\n\nThe Student ID may already be in use.\nPlease try a different one.");
+                    studentIdField.clear();
+                    studentIdField.requestFocus();
+                }
+            });
+        }).start();
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {

@@ -9,10 +9,10 @@ public class DatabaseConnectionPool {
     private static BasicDataSource dataSource;
     static {
         dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/choreday");
-        dataSource.setUsername("choreday");
-        dataSource.setPassword("1234");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost/choreday");
+        dataSource.setUsername("root");
+        dataSource.setPassword("");
     }
 
     public static Connection getConnection() throws SQLException {

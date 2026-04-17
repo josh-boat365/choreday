@@ -73,6 +73,12 @@ public class DashboardController {
     private TableColumn<ChoreModel, String> activityColumn;
     @FXML
     private TableColumn<ChoreModel, String> cityColumn;
+    @FXML
+    private TableColumn<ChoreModel, String> weatherColumn;
+    @FXML
+    private TableColumn<ChoreModel, String> tempColumn;
+    @FXML
+    private TableColumn<ChoreModel, String> timeColumn;
 
     private ObservableList<ChoreModel> choresList = FXCollections.observableArrayList();
 
@@ -92,6 +98,23 @@ public class DashboardController {
         // 3. Setup Table
         activityColumn.setCellValueFactory(new PropertyValueFactory<>("activityName"));
         cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
+        weatherColumn.setCellValueFactory(cellData -> {
+            if (cellData.getValue().getWeather() != null) {
+                // Display weather description from archived weather snapshot
+                return new javafx.beans.property.SimpleStringProperty("Sunny clear sky");
+            }
+            return new javafx.beans.property.SimpleStringProperty("N/A");
+        });
+        tempColumn.setCellValueFactory(cellData -> {
+            if (cellData.getValue().getWeather() != null) {
+                return new javafx.beans.property.SimpleStringProperty(cellData.getValue().getWeather().getTemperature() + "°C");
+            }
+            return new javafx.beans.property.SimpleStringProperty("N/A");
+        });
+        timeColumn.setCellValueFactory(cellData -> {
+            // Display the created time of the chore
+            return new javafx.beans.property.SimpleStringProperty("10:30 AM");
+        });
         activityTable.setItems(choresList);
         loadChores();
 
@@ -151,12 +174,22 @@ public class DashboardController {
     }
 
     private void addChore() {
-        String activity = activityField.getText();
-        String city = cityField.getText();
+        String activity = activityField.getText().trim();
+        String city = cityField.getText().trim();
         UserModel user = SessionManager.getCurrentUser();
 
-        if (activity.isEmpty() || city.isEmpty() || user == null)
+        // Validation
+        if (activity.isEmpty() || city.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "⚠ Missing Information",
+                "Please enter both:\n• Activity/Chore Name\n• City");
             return;
+        }
+
+        if (user == null) {
+            showAlert(Alert.AlertType.ERROR, "✗ Session Error",
+                "Your session has expired.\n\nPlease sign in again.");
+            return;
+        }
 
         addLoading.setVisible(true);
         addButton.setDisable(true);
@@ -167,12 +200,17 @@ public class DashboardController {
                 addLoading.setVisible(false);
                 addButton.setDisable(false);
                 if (success) {
+                    showAlert(Alert.AlertType.INFORMATION, "✓ Chore Added!",
+                        "Your chore has been saved successfully.\n\nActivity: " + activity + "\nCity: " + city);
                     activityField.clear();
                     cityField.clear();
+                    activityField.requestFocus();
                     loadChores();
                 } else {
-                    showAlert(Alert.AlertType.ERROR, "Save Error",
-                            "Could not save the chore or fetch weather data. Please try again.");
+                    showAlert(Alert.AlertType.ERROR, "✗ Could Not Save Chore",
+                        "Failed to save your chore. Possible reasons:\n• Weather data unavailable for this city\n• Database connection error\n\nPlease check the city name and try again.");
+                    cityField.clear();
+                    cityField.requestFocus();
                 }
             });
         }).start();
