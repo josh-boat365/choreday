@@ -1,137 +1,242 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group45.choreday.controllers.DashboardController">
    <children>
-      <Pane layoutY="1.0" prefHeight="52.0" prefWidth="800.0" style="-fx-background-color: #ffffff;">
+      <AnchorPane layoutY="1.0" prefHeight="52.0" style="-fx-background-color: #ffffff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="25.0" fitWidth="106.0" layoutX="22.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="25.0" fitWidth="106.0" layoutX="22.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="22.0" AnchorPane.topAnchor="14.0">
                <image>
                   <Image url="@imgs/choreday-black-lg.png" />
                </image></ImageView>
-            <Separator layoutX="134.0" layoutY="15.0" orientation="VERTICAL" prefHeight="23.0" prefWidth="0.0" />
-            <Label layoutX="599.0" layoutY="19.0" text="Joshua" textFill="#232323">
-               <font>
-                  <Font name="Calibri" size="16.0" />
-               </font>
-            </Label>
-            <ImageView fitHeight="36.0" fitWidth="39.0" layoutX="739.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+            <Separator layoutX="134.0" layoutY="15.0" orientation="VERTICAL" prefHeight="23.0" prefWidth="0.0" AnchorPane.leftAnchor="134.0" AnchorPane.topAnchor="15.0" />
+            <HBox alignment="CENTER_RIGHT" layoutX="350.0" layoutY="14.0" prefHeight="23.0" prefWidth="380.0" spacing="10.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="14.0">
+               <children>
+                  <Label fx:id="studentNameText" text="Joshua" textFill="#232323">
+                     <font>
+                        <Font name="Calibri" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="studentIdText" text="01254890B" textFill="#232323">
+                     <font>
+                        <Font name="Calibri" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <ImageView fx:id="profileIcon" fitHeight="36.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" AnchorPane.rightAnchor="22.0" AnchorPane.topAnchor="8.0">
                <image>
                   <Image url="@imgs/profile-icon.png" />
                </image>
             </ImageView>
-            <Label layoutX="654.0" layoutY="19.0" text="01254890B" textFill="#232323">
-               <font>
-                  <Font name="Calibri" size="16.0" />
-               </font>
-            </Label>
          </children>
-      </Pane>
-      <Label layoutX="79.0" layoutY="74.0" text="Good morning, Joshua" textFill="#232323">
+      </AnchorPane>
+      <Label fx:id="greetingText" layoutX="79.0" layoutY="74.0" text="Good morning, Joshua" textFill="#232323" AnchorPane.leftAnchor="79.0" AnchorPane.topAnchor="74.0">
          <font>
             <Font name="Calibri Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="660.0" layoutY="77.0" text="9:58 AM" textFill="#232323">
+      <Label fx:id="timeText" layoutX="660.0" layoutY="77.0" text="9:58 AM" textFill="#232323" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="77.0">
          <font>
             <Font name="Calibri Bold" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="81.0" layoutY="94.0" text="Thursday, 19th March, 2026">
+      <Label fx:id="dateText" layoutX="81.0" layoutY="94.0" text="Thursday, 19th March, 2026" AnchorPane.leftAnchor="81.0" AnchorPane.topAnchor="94.0">
          <font>
             <Font name="Calibri" size="12.0" />
          </font>
       </Label>
-      <Pane layoutX="81.0" layoutY="122.0" prefHeight="69.0" prefWidth="644.0" style="-fx-background-color: #ffffff;">
+      <AnchorPane layoutX="81.0" layoutY="122.0" prefHeight="69.0" style="-fx-background-color: #ffffff;" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="122.0">
          <children>
-            <ImageView fitHeight="59.0" fitWidth="51.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="59.0" fitWidth="51.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="9.0">
                <image>
                   <Image url="@imgs/rain-cloud.png" />
                </image>
             </ImageView>
-            <Label layoutX="80.0" layoutY="15.0" text="31oC" textFill="#232323">
+            <Label fx:id="temperatureText" layoutX="80.0" layoutY="15.0" text="31oC" textFill="#232323" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="15.0">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="81.0" layoutY="42.0" text="Partly Cloudy, Accra Ghana" textFill="#232323">
+            <Label fx:id="conditionAndCountryText" layoutX="81.0" layoutY="42.0" text="Partly Cloudy, Accra Ghana" textFill="#232323" AnchorPane.leftAnchor="81.0" AnchorPane.topAnchor="42.0">
                <font>
                   <Font name="Calibri" size="12.0" />
                </font>
             </Label>
             <Separator layoutX="237.0" layoutY="17.0" orientation="VERTICAL" prefHeight="36.0" prefWidth="0.0" />
-            <Label layoutX="260.0" layoutY="16.0" text="Humidity" textFill="#9e9e9e">
-               <font>
-                  <Font name="Calibri" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="259.0" layoutY="24.0" text="72%" textFill="#232323">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-            <Label layoutX="342.0" layoutY="16.0" text="Wind" textFill="#9e9e9e">
-               <font>
-                  <Font name="Calibri" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="341.0" layoutY="24.0" text="14km/h" textFill="#232323">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-            <Label layoutX="462.0" layoutY="15.0" text="UV Index" textFill="#9e9e9e">
-               <font>
-                  <Font name="Calibri" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="461.0" layoutY="23.0" text="High" textFill="#232323">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-            <Label layoutX="555.0" layoutY="16.0" text="Feels like" textFill="#9e9e9e">
-               <font>
-                  <Font name="Calibri" size="12.0" />
-               </font>
-            </Label>
-            <Label layoutX="554.0" layoutY="24.0" text="34oC" textFill="#232323">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-         </children></Pane>
-      <TextField layoutX="81.0" layoutY="239.0" prefHeight="36.0" prefWidth="284.0" promptText="eg. Morining Lecture with Mr. Dzata" style="-fx-border-width: 0.5px; -fx-border-color: #232323;" />
-      <TextField layoutX="380.0" layoutY="239.0" prefHeight="36.0" prefWidth="193.0" promptText="Enter City" style="-fx-border-width: 0.5px; -fx-border-color: #232323;" />
-      <Button layoutX="589.0" layoutY="239.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="132.0" style="-fx-background-color: #232323; -fx-border-width: 0.5px; -fx-border-color: #232323;" text="+ Add" textFill="WHITE">
-         <font>
-            <Font name="Calibri Bold" size="14.0" />
-         </font>
-      </Button>
-      <Label layoutX="81.0" layoutY="217.0" text="Activity Name" textFill="#232323">
+            <HBox alignment="CENTER" layoutX="250.0" layoutY="10.0" prefHeight="50.0" spacing="25.0" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="10.0">
+               <children>
+                  <VBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label text="Humidity" textFill="#9e9e9e">
+                           <font>
+                              <Font name="Calibri" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="humidityText" text="72%" textFill="#232323">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label text="Wind" textFill="#9e9e9e">
+                           <font>
+                              <Font name="Calibri" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="windText" text="14km/h" textFill="#232323">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label text="UV Index" textFill="#9e9e9e">
+                           <font>
+                              <Font name="Calibri" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="uvText" text="High" textFill="#232323">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label text="Feels like" textFill="#9e9e9e">
+                           <font>
+                              <Font name="Calibri" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="feelsLike" text="34oC" textFill="#232323">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <ProgressIndicator fx:id="weatherLoading" layoutX="305.0" layoutY="17.0" prefHeight="36.0" prefWidth="36.0" visible="false" />
+         </children>
+      </AnchorPane>
+
+      <HBox layoutX="81.0" layoutY="205.0" spacing="15.0" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="205.0">
+         <children>
+            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label text="Activity Name" textFill="#232323">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="activityField" prefHeight="36.0" promptText="eg. Morning Lecture" />
+               </children>
+            </VBox>
+            <VBox spacing="5.0" HBox.hgrow="SOMETIMES">
+               <children>
+                  <Label text="City" textFill="#232323">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="cityField" prefHeight="36.0" prefWidth="150.0" promptText="Enter City" />
+               </children>
+            </VBox>
+            <Button fx:id="resetWeatherButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="icon-button" text="↻" visible="false">
+               <tooltip>
+                  <Tooltip text="Return to Current Weather" />
+               </tooltip>
+               <VBox.margin>
+                  <javafx.geometry.Insets top="20.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </HBox>
+
+      <HBox layoutX="81.0" layoutY="267.0" spacing="15.0" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="267.0">
+         <children>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Schedule Date" textFill="#232323">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <DatePicker fx:id="datePicker" prefHeight="36.0" prefWidth="206.0" promptText="Select Date" />
+               </children>
+            </VBox>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Time" textFill="#232323">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox spacing="5.0">
+                     <children>
+                        <ComboBox fx:id="hourCombo" prefHeight="36.0" prefWidth="65.0" promptText="HH" styleClass="time-combo" />
+                        <Label text=":" textFill="#232323">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <padding>
+                              <javafx.geometry.Insets top="5.0" />
+                           </padding>
+                        </Label>
+                        <ComboBox fx:id="minuteCombo" prefHeight="36.0" prefWidth="65.0" promptText="mm" styleClass="time-combo" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <AnchorPane HBox.hgrow="ALWAYS">
+               <children>
+                  <Button fx:id="addButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="132.0" styleClass="primary" text="+ Add Chore" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                  <ProgressIndicator fx:id="addLoading" prefHeight="30.0" prefWidth="30.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="51.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+
+      <Label layoutX="81.0" layoutY="335.0" text="Your Chores" textFill="#232323" AnchorPane.leftAnchor="81.0" AnchorPane.topAnchor="335.0">
          <font>
             <Font name="Calibri Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="380.0" layoutY="217.0" text="City" textFill="#232323">
-         <font>
-            <Font name="Calibri Bold" size="14.0" />
-         </font>
-      </Label>
-      <TableView layoutX="81.0" layoutY="317.0" prefHeight="247.0" prefWidth="644.0">
+      <TableView fx:id="activityTable" layoutX="81.0" layoutY="360.0" prefHeight="190.0" prefWidth="644.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="360.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="ACTIVITY" />
-          <TableColumn prefWidth="75.0" text="CITY" />
+          <TableColumn fx:id="activityColumn" prefWidth="150.0" text="ACTIVITY" />
+          <TableColumn fx:id="cityColumn" prefWidth="110.0" text="CITY" />
+          <TableColumn fx:id="weatherColumn" prefWidth="140.0" text="WEATHER" />
+          <TableColumn fx:id="tempColumn" prefWidth="100.0" text="TEMP" />
+          <TableColumn fx:id="timeColumn" prefWidth="144.0" text="SCHEDULED TIME" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
-      <Label layoutX="81.0" layoutY="292.0" text="Today's Activities" textFill="#232323">
-         <font>
-            <Font name="Calibri Bold" size="14.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>
