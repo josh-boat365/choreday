@@ -26,6 +26,9 @@ public class Navigator {
 
             // 4. Set the new scene to the stage and show it
             stage.setScene(scene);
+            stage.setResizable(true);
+            stage.setMinWidth(800);
+            stage.setMinHeight(600);
             stage.show();
 
         } catch (IOException e) {
